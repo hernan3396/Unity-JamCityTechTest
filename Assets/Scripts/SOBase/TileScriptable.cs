@@ -5,6 +5,5 @@ public class TileScriptable : ScriptableObject
 {
     public string TileName;
     [Range(0, 10)] public int TileCost;
-    public Material TileMaterial;
     public bool CanTravel = true;
 }
