@@ -4,6 +4,7 @@ using UnityEngine;
 public class TileScriptable : ScriptableObject
 {
     public string TileName;
-    public int TileCost;
+    [Range(0, 10)] public int TileCost;
     public Material TileMaterial;
+    public bool CanTravel = true;
 }
