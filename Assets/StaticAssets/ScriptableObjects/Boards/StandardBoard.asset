@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: StandardBoard
   m_EditorClassIdentifier: 
   BoardSize: {x: 8, y: 8}
+  BoardSpacing: {x: 1, y: 0.75}
+  RowOffset: 0.5
