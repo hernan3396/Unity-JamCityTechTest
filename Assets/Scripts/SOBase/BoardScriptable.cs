@@ -4,4 +4,6 @@ using UnityEngine;
 public class BoardScriptable : ScriptableObject
 {
     public Vector2 BoardSize;
+    public Vector2 BoardSpacing;
+    public float RowOffset;
 }
