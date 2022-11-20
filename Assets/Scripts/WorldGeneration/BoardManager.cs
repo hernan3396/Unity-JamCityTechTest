@@ -17,6 +17,9 @@ public class BoardManager : MonoBehaviour
         GenerateBoard();
     }
 
+    /// <Summary>
+    /// Generates board using data from _boardData
+    /// </Summary>
     private void GenerateBoard()
     {
         Vector3 startingPos = _boardStartingPos.transform.position;
@@ -35,6 +38,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /// <Summary>
+    /// Generates a row for the board
+    /// </Summary>
     private void FillRow(Vector3 startingPos)
     {
         Vector3 tilePos = startingPos;
@@ -48,6 +54,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /// <Summary>
+    /// Picks a random tile from tile pool
+    /// </Summary>
     public void GenerateRandomTile(Vector3 tilePos)
     {
         int randTile = Random.Range(0, _tiles.Length);
