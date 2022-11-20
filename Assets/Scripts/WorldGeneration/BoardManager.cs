@@ -5,6 +5,7 @@ public class BoardManager : MonoBehaviour
     [Header("Board")]
     [SerializeField] private GameObject _boardStartingPos;
     [SerializeField] private BoardScriptable _boardData;
+    private Board _board;
 
     [Header("Tiles")]
     [SerializeField] private Transform _tileParent;
@@ -22,35 +23,21 @@ public class BoardManager : MonoBehaviour
     /// </Summary>
     private void GenerateBoard()
     {
+        // if tile size != 1, multiply row & column by tileSize
+        _board = new Board((int)_boardData.BoardSize.x, (int)_boardData.BoardSize.y);
+
         Vector3 startingPos = _boardStartingPos.transform.position;
-        Vector3 rowStartingPoint;
 
-        for (int i = 0; i < _boardData.BoardSize.y; i++)
+        for (int row = 0; row < _board.GetPosY; row++)
         {
-            float tileOffsetY = i * _boardData.BoardSpacing.y;
+            Vector3 rowPos = new Vector3(0, 0, row * _boardData.BoardSpacing.y) + startingPos;
+            if (row % 2 == 0) rowPos += new Vector3(_boardData.RowOffset, 0, 0);
 
-            float offset = 0;
-            if (i % 2 == 0) offset = _boardData.RowOffset;
-
-            rowStartingPoint = new Vector3(startingPos.x + offset, 0, startingPos.z + tileOffsetY);
-
-            FillRow(rowStartingPoint);
-        }
-    }
-
-    /// <Summary>
-    /// Generates a row for the board
-    /// </Summary>
-    private void FillRow(Vector3 startingPos)
-    {
-        Vector3 tilePos = startingPos;
-
-        for (int i = 0; i < _boardData.BoardSize.x; i++)
-        {
-            float tileOffset = i * _boardData.BoardSpacing.x;
-            tilePos = new Vector3(startingPos.x + tileOffset, 0, tilePos.z);
-
-            GenerateRandomTile(tilePos);
+            for (int column = 0; column < _board.GetPosX; column++)
+            {
+                Vector3 tilePos = rowPos + new Vector3(column, 0, 0);
+                GenerateRandomTile(tilePos);
+            }
         }
     }
 
@@ -61,6 +48,6 @@ public class BoardManager : MonoBehaviour
     {
         int randTile = Random.Range(0, _tiles.Length);
 
-        Instantiate(_tiles[randTile], tilePos, Quaternion.identity, _tileParent);
+        GameObject go = Instantiate(_tiles[randTile], tilePos, Quaternion.identity, _tileParent);
     }
 }
