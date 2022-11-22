@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: WaterTile
   m_EditorClassIdentifier: 
   TileName: Water Tile
-  TileCost: 10
+  TileCost: 0
   CanTravel: 0
