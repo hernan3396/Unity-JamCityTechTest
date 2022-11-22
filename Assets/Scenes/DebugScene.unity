@@ -710,11 +710,11 @@ MonoBehaviour:
   _boardData: {fileID: 11400000, guid: 185a3891e5625d04baa46a433bb2e05f, type: 2}
   _tileParent: {fileID: 2057087168}
   _tiles:
-  - {fileID: 3894197100179550449, guid: b2894a5794ae8cc4c88a29c33abe6589, type: 3}
-  - {fileID: 820859681572117964, guid: 502f87e42a1e87344aa7c8b9c19f7294, type: 3}
+  - {fileID: 7303647784746195074, guid: f6206e97019296c4eafab2542cc3dfab, type: 3}
+  - {fileID: 4348446218656663958, guid: c1fab93ff799f6b46b16ba2ebf664164, type: 3}
   - {fileID: 1513724054289265238, guid: cba7793ade1042b4c88cfc475366fea4, type: 3}
-  - {fileID: 2533836637906971085, guid: 3bf1a5b165cf8bd4d9485d8f049736b4, type: 3}
-  - {fileID: 40659375998648153, guid: a392c2b828307a34998e320d6361eb0d, type: 3}
+  - {fileID: 8014573290774072205, guid: 82579dfacfcf5684aafc5ac647a5465f, type: 3}
+  - {fileID: 2501179453919803988, guid: 22fb32dc2f6ff2043847d27d7b21cd93, type: 3}
 --- !u!1 &1535415013
 GameObject:
   m_ObjectHideFlags: 0

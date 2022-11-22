@@ -1,26 +1,34 @@
-using UnityEngine;
-
 public class Board
 {
-    private int posX;
-    private int posY;
-    private int[,] boardArray;
+    private int _width;
+    private int _height;
+    private Tile[,] _tiles;
 
-    public Board(int posX, int posY)
+    public Board(int width, int height)
     {
-        this.posX = posX;
-        this.posY = posY;
+        this._width = width;
+        this._height = height;
 
-        boardArray = new int[posX, posY];
+        _tiles = new Tile[width, height];
     }
 
-    public int GetPosX
+    public void SetTile(int posX, int row, Tile tile)
     {
-        get { return posX; }
+        _tiles[posX, row] = tile;
     }
 
-    public int GetPosY
+    public Tile GetTile(int column, int row)
     {
-        get { return posY; }
+        return _tiles[column, row];
+    }
+
+    public int GetWidth
+    {
+        get { return _width; }
+    }
+
+    public int GetHeight
+    {
+        get { return _height; }
     }
 }

@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: WaterTile
   m_EditorClassIdentifier: 
   TileName: Water Tile
-  TileCost: 0
-  TileMaterial: {fileID: 2100000, guid: a60b20085ddc2b840a92a1957b678612, type: 2}
+  TileCost: 10
   CanTravel: 0
