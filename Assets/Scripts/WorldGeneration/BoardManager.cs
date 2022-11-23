@@ -79,6 +79,7 @@ public class BoardManager : MonoBehaviour
 
         int colOffset = currentCol;
 
+        // (currentcol = 1, currentrow = 0)
         if (currentRow % 2 != 0)
         {
             colOffset -= 1;
@@ -88,7 +89,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            if (currentCol - 1 > 0 && _board.GetTile(currentCol - 1, currentRow).CanTravel)
+            if (currentCol - 1 >= 0 && _board.GetTile(currentCol - 1, currentRow).CanTravel)
                 _neighbours.Add(_board.GetTile(currentCol - 1, currentRow));
         }
 
