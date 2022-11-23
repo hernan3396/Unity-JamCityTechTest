@@ -2,7 +2,6 @@ using UnityEngine;
 using PathFinding;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(TileHighlight))]
 public class Tile : MonoBehaviour, IAStarNode
 {
     [SerializeField] private TileScriptable _data;
