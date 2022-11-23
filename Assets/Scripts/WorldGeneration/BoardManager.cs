@@ -64,30 +64,39 @@ public class BoardManager : MonoBehaviour
             for (int col = 0; col < _board.GetWidth; col++)
             {
                 Tile selectedTile = _board.GetTile(col, row);
-
                 if (!selectedTile.CanTravel) continue;
 
-                if (row % 2 == 0) AddNeighboursEvenRow(col, row, selectedTile);
-                else AddNeighboursUnevenRow(col, row, selectedTile);
+                AddNeighbours(selectedTile, col, row);
             }
     }
 
-    // needs refactoring
-
-    private void AddNeighboursEvenRow(int col, int row, Tile selectedTile)
+    /// <Summary>
+    /// Adds neighbours to tile neighbour list
+    /// </Summary>
+    private void AddNeighbours(Tile selectedTile, int currentCol, int currentRow)
     {
         List<IAStarNode> _neighbours = new List<IAStarNode>();
 
-        if (col - 1 > 0 && _board.GetTile(col - 1, row).CanTravel)
-            _neighbours.Add(_board.GetTile(col - 1, row)); // if exists a tile to the left we add it
+        int colOffset = currentCol;
 
-        for (int rowNeighbour = row - 1; rowNeighbour <= row + 1; rowNeighbour++)
-            for (int colNeighbour = col; colNeighbour <= col + 1; colNeighbour++)
+        if (currentRow % 2 != 0)
+        {
+            colOffset -= 1;
+
+            if (currentCol + 1 < _board.GetWidth && _board.GetTile(currentCol + 1, currentRow).CanTravel)
+                _neighbours.Add(_board.GetTile(currentCol + 1, currentRow));
+        }
+        else
+        {
+            if (currentCol - 1 > 0 && _board.GetTile(currentCol - 1, currentRow).CanTravel)
+                _neighbours.Add(_board.GetTile(currentCol - 1, currentRow));
+        }
+
+        for (int rowNeighbour = currentRow - 1; rowNeighbour <= currentRow + 1; rowNeighbour++)
+            for (int colNeighbour = colOffset; colNeighbour <= colOffset + 1; colNeighbour++)
             {
-                if (rowNeighbour < 0 || colNeighbour < 0) continue;
-                if (rowNeighbour >= _board.GetHeight || colNeighbour >= _board.GetWidth) continue;
-                if (rowNeighbour == row && colNeighbour == col) continue;
-                if (!_board.GetTile(colNeighbour, rowNeighbour).CanTravel) continue;
+                if (rowNeighbour == currentRow && colNeighbour == currentCol) continue;
+                if (!IsInBounds(colNeighbour, rowNeighbour)) continue;
 
                 _neighbours.Add(_board.GetTile(colNeighbour, rowNeighbour));
             }
@@ -95,26 +104,12 @@ public class BoardManager : MonoBehaviour
         selectedTile.SetNeighbours(_neighbours);
     }
 
-    private void AddNeighboursUnevenRow(int col, int row, Tile selectedTile)
+    private bool IsInBounds(int colNeighbour, int rowNeighbour)
     {
-        List<IAStarNode> _neighbours = new List<IAStarNode>();
+        if (colNeighbour < 0 || rowNeighbour < 0) return false;
+        if (colNeighbour >= _board.GetWidth || rowNeighbour >= _board.GetHeight) return false;
+        if (!_board.GetTile(colNeighbour, rowNeighbour).CanTravel) return false;
 
-        if (col + 1 < _board.GetWidth && _board.GetTile(col + 1, row).CanTravel)
-            _neighbours.Add(_board.GetTile(col + 1, row)); // if exists a tile to the right we add it
-
-        // checks for neighbours
-        for (int rowNeighbour = row - 1; rowNeighbour <= row + 1; rowNeighbour++)
-            for (int colNeighbour = col - 1; colNeighbour <= col; colNeighbour++)
-            {
-                // checking out of bounds
-                if (rowNeighbour < 0 || colNeighbour < 0) continue;
-                if (rowNeighbour >= _board.GetHeight || colNeighbour >= _board.GetWidth) continue;
-                if (rowNeighbour == row && colNeighbour == col) continue;
-                if (!_board.GetTile(colNeighbour, rowNeighbour).CanTravel) continue;
-
-                _neighbours.Add(_board.GetTile(colNeighbour, rowNeighbour));
-            }
-
-        selectedTile.SetNeighbours(_neighbours);
+        return true;
     }
 }
