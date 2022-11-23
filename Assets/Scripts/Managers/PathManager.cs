@@ -88,7 +88,7 @@ public class PathManager : MonoBehaviour
 
         if (_pathList == null)
         {
-            _goalTile.GetTileHighlight.TileSelected();
+            _goalTile.GetTileHighlight.GoalSelected();
             ChangePathState(PathState.ChoosingNewPath);
             return;
         }
@@ -139,7 +139,7 @@ public class PathManager : MonoBehaviour
 
         EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, "Path Cost: " + _pathDuration.ToString());
         _startTile.GetTileHighlight.TileSelected();
-        _goalTile.GetTileHighlight.TileSelected();
+        _goalTile.GetTileHighlight.GoalSelected();
     }
 
     private void UnselectPath()

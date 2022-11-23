@@ -2,48 +2,117 @@ using UnityEngine;
 
 public class TileHighlight : MonoBehaviour
 {
+    enum HighlightState
+    {
+        Idle,
+        Hovered,
+        Selected,
+        Path,
+        Goal
+    }
+    [SerializeField] private HighlightState _state;
+
     [SerializeField] private TileHighlightingScriptable _data;
     private Transform _modelTransform;
     private Material _modelMaterial;
+    private Vector3 _initPos;
 
     private void Awake()
     {
         _modelTransform = GetComponentInChildren<Transform>();
         _modelMaterial = GetComponentInChildren<MeshRenderer>().material;
+
+        _initPos = _modelTransform.position;
+        SwitchState(HighlightState.Idle);
     }
 
-    private void TileHovered()
+    private void Idle()
     {
-        _modelTransform.position += _data.HighlightPosition;
+        _modelTransform.position = _initPos;
+        _modelMaterial.SetColor(_data.ColorProp, _data.UnselectedColor);
     }
 
-    private void TileUnhovered()
+    private void Hovered()
     {
-        _modelTransform.position -= _data.HighlightPosition;
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+    }
+
+    private void Selected()
+    {
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.SelectedColor);
+    }
+
+    private void Path()
+    {
+        _modelTransform.position = _initPos + _data.PathPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.PathColor);
+    }
+
+    private void Goal()
+    {
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.GoalColor);
+    }
+
+    private void SwitchState(HighlightState nextState)
+    {
+        _state = nextState;
+
+        switch (_state)
+        {
+            case HighlightState.Idle:
+                Idle();
+                break;
+
+            case HighlightState.Hovered:
+                Hovered();
+                break;
+
+            case HighlightState.Selected:
+                Selected();
+                break;
+
+            case HighlightState.Path:
+                Path();
+                break;
+
+            case HighlightState.Goal:
+                Goal();
+                break;
+        }
     }
 
     public void TileSelected()
     {
-        _modelMaterial.SetColor("_Color", _data.SelectedColor);
+        SwitchState(HighlightState.Selected);
+    }
+
+    public void GoalSelected()
+    {
+        SwitchState(HighlightState.Goal);
     }
 
     public void TilePath()
     {
-        _modelMaterial.SetColor("_Color", _data.PathColor);
+        if (_state == HighlightState.Idle)
+            SwitchState(HighlightState.Path);
     }
 
     public void ResetSelection()
     {
-        _modelMaterial.SetColor("_Color", _data.UnselectedColor);
+        SwitchState(HighlightState.Idle);
     }
 
     private void OnMouseEnter()
     {
-        TileHovered();
+        if (_state == HighlightState.Idle)
+            SwitchState(HighlightState.Hovered);
     }
 
     private void OnMouseExit()
     {
-        TileUnhovered();
+        if (_state == HighlightState.Hovered)
+            SwitchState(HighlightState.Idle);
     }
 }
