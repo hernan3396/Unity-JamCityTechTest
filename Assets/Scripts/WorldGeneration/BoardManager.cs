@@ -56,7 +56,7 @@ public class BoardManager : MonoBehaviour
     }
 
     /// <Summary>
-    /// sets tile neighbour
+    /// starts setting tile neighbour
     /// </Summary>
     public void SetTileNeighbours()
     {
@@ -104,6 +104,9 @@ public class BoardManager : MonoBehaviour
         selectedTile.SetNeighbours(_neighbours);
     }
 
+    /// <Summary>
+    /// Checks if adjacent tile is in bounds
+    /// </Summary>
     private bool IsInBounds(int colNeighbour, int rowNeighbour)
     {
         if (colNeighbour < 0 || rowNeighbour < 0) return false;
