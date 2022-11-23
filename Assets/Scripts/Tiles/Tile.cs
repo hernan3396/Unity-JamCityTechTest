@@ -46,4 +46,9 @@ public class Tile : MonoBehaviour, IAStarNode
     {
         get { return _data.CanTravel; }
     }
+
+    public int GetCost
+    {
+        get { return _data.TileCost; }
+    }
 }

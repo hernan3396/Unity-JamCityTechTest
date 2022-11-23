@@ -22,9 +22,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TMP_Text[] _elements;
 
-    private void UpdateElement(Elements element, TextScriptable textScriptable)
+    private void UpdateElement(Elements element, string text)
     {
-        _elements[(int)element].text = textScriptable.Text;
+        _elements[(int)element].text = text;
     }
 
     private void OnDestroy()
