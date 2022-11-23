@@ -1,6 +1,7 @@
 using UnityEngine;
 using PathFinding;
 using System.Collections.Generic;
+
 public class PathManager : MonoBehaviour
 {
     enum PathState
@@ -12,23 +13,31 @@ public class PathManager : MonoBehaviour
         ChoosingNewPath
     }
 
+    [Header("Tiles")]
     [SerializeField] private Tile _startTile;
     [SerializeField] private Tile _goalTile;
     private IList<IAStarNode> _pathList;
 
-    [SerializeField] private PathState _selectedTiles;
+    [SerializeField] private PathState _pathState;
+
+    [Header("States Text")]
+    [SerializeField] private TextScriptable[] _texts;
 
     private void Awake()
     {
-        _selectedTiles = PathState.Starting;
-        ChangePathState(PathState.SelectingFirstTile);
-
         EventManager.TileSelected += TileSelected;
+        EventManager.UILoaded += OnUILoaded;
+    }
+
+    private void OnUILoaded()
+    {
+        _pathState = PathState.Starting;
+        ChangePathState(PathState.SelectingFirstTile);
     }
 
     private void TileSelected(Tile selectedTile)
     {
-        switch (_selectedTiles)
+        switch (_pathState)
         {
             case PathState.Starting:
                 break;
@@ -53,7 +62,8 @@ public class PathManager : MonoBehaviour
 
     private void ChangePathState(PathState state)
     {
-        _selectedTiles = state;
+        _pathState = state;
+        EventManager.OnUpdateUIElement(UIManager.Elements.StateText, _texts[(int)state]);
     }
 
     private void SetStartTile(Tile selectedTile)
@@ -124,5 +134,6 @@ public class PathManager : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.TileSelected -= TileSelected;
+        EventManager.UILoaded -= OnUILoaded;
     }
 }
