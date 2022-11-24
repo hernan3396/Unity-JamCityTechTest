@@ -39,6 +39,7 @@ public class PathManager : MonoBehaviour
         UpdateDayCounter();
     }
 
+    #region States
     private void SwitchState(PathState state)
     {
         _pathState = state;
@@ -115,6 +116,7 @@ public class PathManager : MonoBehaviour
         _goalTile.GetTileHighlight.ResetSelection();
         StartTileSelected(selectedTile);
     }
+    #endregion
 
     /// <Summary>
     /// Simulates a player "movement" in the board when you confirm
@@ -129,6 +131,7 @@ public class PathManager : MonoBehaviour
         _goalTile = null;
     }
 
+    #region UIUpdates
     /// <Summary>
     /// Cost of every move made by the player
     /// </Summary>
@@ -145,7 +148,9 @@ public class PathManager : MonoBehaviour
     {
         EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, text);
     }
+    #endregion
 
+    #region PathHighlighting
     private void ShowPath()
     {
         _pathDuration = 0;
@@ -175,6 +180,7 @@ public class PathManager : MonoBehaviour
 
         _pathList.Clear();
     }
+    #endregion
 
     private void OnDestroy()
     {

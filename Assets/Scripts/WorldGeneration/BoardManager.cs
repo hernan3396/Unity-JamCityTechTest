@@ -21,6 +21,7 @@ public class BoardManager : MonoBehaviour
         SetTileNeighbours();
     }
 
+    #region BoardGeneration
     /// <Summary>
     /// Generates board using data from _boardData
     /// </Summary>
@@ -54,10 +55,9 @@ public class BoardManager : MonoBehaviour
         GameObject go = Instantiate(_tiles[randTile], tilePos, Quaternion.identity, _tileParent);
         return go.GetComponent<Tile>();
     }
+    #endregion
 
-    /// <Summary>
-    /// starts setting tile neighbour
-    /// </Summary>
+    #region NeighboursSetter
     public void SetTileNeighbours()
     {
         for (int row = 0; row < _board.GetHeight; row++)
@@ -106,7 +106,7 @@ public class BoardManager : MonoBehaviour
     }
 
     /// <Summary>
-    /// Checks if adjacent tile is in bounds
+    /// Checks if adjacent tile is in board boundaries
     /// </Summary>
     private bool IsInBounds(int colNeighbour, int rowNeighbour)
     {
@@ -116,4 +116,5 @@ public class BoardManager : MonoBehaviour
 
         return true;
     }
+    #endregion
 }

@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour, IAStarNode
             EventManager.OnTileSelected(this);
     }
 
+    #region Pathfinding
     public IEnumerable<IAStarNode> Neighbours => _neighbours;
 
     public float CostTo(IAStarNode neighbour)
@@ -36,7 +37,9 @@ public class Tile : MonoBehaviour, IAStarNode
     {
         _neighbours.AddRange(neighbours);
     }
+    #endregion
 
+    #region Getters
     public TileHighlight GetTileHighlight
     {
         get { return _tileHighlight; }
@@ -51,4 +54,5 @@ public class Tile : MonoBehaviour, IAStarNode
     {
         get { return _data.TileCost; }
     }
+    #endregion
 }
