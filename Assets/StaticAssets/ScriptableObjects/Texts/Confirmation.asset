@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716da402abdda8543847aa7517e11e2d, type: 3}
   m_Name: Confirmation
   m_EditorClassIdentifier: 
-  Text: Click destination again to confirm, select a different one to change path
+  Text: Click destination again to confirm, select a different tile to change path
