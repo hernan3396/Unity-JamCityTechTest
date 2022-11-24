@@ -26,35 +26,10 @@ public class TileHighlight : MonoBehaviour
         SwitchState(HighlightState.Idle);
     }
 
-    private void Idle()
-    {
-        _modelTransform.position = _initPos;
-        _modelMaterial.SetColor(_data.ColorProp, _data.UnselectedColor);
-    }
-
-    private void Hovered()
-    {
-        _modelTransform.position = _initPos + _data.HighlightPosition;
-    }
-
-    private void Selected()
-    {
-        _modelTransform.position = _initPos + _data.HighlightPosition;
-        _modelMaterial.SetColor(_data.ColorProp, _data.SelectedColor);
-    }
-
-    private void Path()
-    {
-        _modelTransform.position = _initPos + _data.PathPosition;
-        _modelMaterial.SetColor(_data.ColorProp, _data.PathColor);
-    }
-
-    private void Goal()
-    {
-        _modelTransform.position = _initPos + _data.HighlightPosition;
-        _modelMaterial.SetColor(_data.ColorProp, _data.GoalColor);
-    }
-
+    #region States
+    /// <Summary>
+    /// Works similar to a state machine but simpler
+    /// </Summary>
     private void SwitchState(HighlightState nextState)
     {
         _state = nextState;
@@ -83,6 +58,37 @@ public class TileHighlight : MonoBehaviour
         }
     }
 
+    private void Idle()
+    {
+        _modelTransform.position = _initPos;
+        _modelMaterial.SetColor(_data.ColorProp, _data.UnselectedColor);
+    }
+
+    private void Hovered()
+    {
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+    }
+
+    private void Selected()
+    {
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.SelectedColor);
+    }
+
+    private void Path()
+    {
+        _modelTransform.position = _initPos + _data.PathPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.PathColor);
+    }
+
+    private void Goal()
+    {
+        _modelTransform.position = _initPos + _data.HighlightPosition;
+        _modelMaterial.SetColor(_data.ColorProp, _data.GoalColor);
+    }
+    #endregion
+
+    #region TileSelection
     public void TileSelected()
     {
         SwitchState(HighlightState.Selected);
@@ -103,6 +109,7 @@ public class TileHighlight : MonoBehaviour
     {
         SwitchState(HighlightState.Idle);
     }
+    #endregion
 
     private void OnMouseEnter()
     {
