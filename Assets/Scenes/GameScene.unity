@@ -443,7 +443,6 @@ MonoBehaviour:
   _goalTile: {fileID: 0}
   _pathState: 0
   _texts:
-  - {fileID: 11400000, guid: 7f06dcf31a6fafb4c855d52b20a75d1e, type: 2}
   - {fileID: 11400000, guid: ddb7ecf1aa4da4c4a8b3c758382606fe, type: 2}
   - {fileID: 11400000, guid: 991d9e8bdfb7ce2418dadf30aeabe753, type: 2}
   - {fileID: 11400000, guid: 5a234460e36cedd46bcff57af5956310, type: 2}

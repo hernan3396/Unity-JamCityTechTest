@@ -6,11 +6,10 @@ public class PathManager : MonoBehaviour
 {
     enum PathState
     {
-        Starting,
-        SelectingFirstTile,
-        SelectingGoalTile,
-        WaitingForConfirmation,
-        ChoosingNewPath
+        Idle,
+        StartTileSelected,
+        GoalTileSelected,
+        InvalidPath
     }
 
     [Header("Tiles")]
@@ -34,95 +33,117 @@ public class PathManager : MonoBehaviour
 
     private void OnUILoaded()
     {
-        _pathState = PathState.Starting;
-        ChangePathState(PathState.SelectingFirstTile);
-        EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, string.Empty);
-        EventManager.OnUpdateUIElement(UIManager.Elements.Duration, _daysPassed.ToString());
+        SwitchState(PathState.Idle);
+
+        UpdatePathCounter(string.Empty);
+        UpdateDayCounter();
     }
 
-    private void TileSelected(Tile selectedTile)
-    {
-        switch (_pathState)
-        {
-            case PathState.Starting:
-                break;
-
-            case PathState.SelectingFirstTile:
-                SetStartTile(selectedTile);
-                break;
-
-            case PathState.SelectingGoalTile:
-                SetGoalTile(selectedTile);
-                break;
-
-            case PathState.WaitingForConfirmation:
-                CheckingGoal(selectedTile);
-                break;
-
-            case PathState.ChoosingNewPath:
-                ChooseNewPath(selectedTile);
-                break;
-        }
-    }
-
-    private void ChangePathState(PathState state)
+    private void SwitchState(PathState state)
     {
         _pathState = state;
         EventManager.OnUpdateUIElement(UIManager.Elements.StateText, _texts[(int)state].Text);
     }
 
-    private void SetStartTile(Tile selectedTile)
+    /// <Summary>
+    /// Works similar to a state machine but simpler
+    /// </Summary>
+    private void TileSelected(Tile selectedTile)
+    {
+        switch (_pathState)
+        {
+            case PathState.Idle:
+                Idle(selectedTile);
+                break;
+
+            case PathState.StartTileSelected:
+                StartTileSelected(selectedTile);
+                break;
+
+            case PathState.GoalTileSelected:
+                GoalTileSelected(selectedTile);
+                break;
+
+            case PathState.InvalidPath:
+                InvalidPath(selectedTile);
+                break;
+        }
+    }
+
+    private void Idle(Tile selectedTile)
     {
         _startTile = selectedTile;
         _startTile.GetTileHighlight.TileSelected();
-        EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, string.Empty);
+        UpdatePathCounter(string.Empty);
 
-        ChangePathState(PathState.SelectingGoalTile);
+        SwitchState(PathState.StartTileSelected);
     }
 
-    private void SetGoalTile(Tile selectedTile)
+    private void StartTileSelected(Tile selectedTile)
     {
         _goalTile = selectedTile;
+        _goalTile.GetTileHighlight.GoalSelected();
 
         _pathList = AStar.GetPath(_startTile, _goalTile);
 
         if (_pathList == null)
         {
-            _goalTile.GetTileHighlight.GoalSelected();
-            ChangePathState(PathState.ChoosingNewPath);
+            UpdatePathCounter("Invalid");
+            SwitchState(PathState.InvalidPath);
             return;
         }
 
         ShowPath();
-        ChangePathState(PathState.WaitingForConfirmation);
+        SwitchState(PathState.GoalTileSelected);
     }
 
-    private void CheckingGoal(Tile selectedTile)
+    private void GoalTileSelected(Tile selectedTile)
     {
         UnselectPath();
 
         if (_goalTile != selectedTile)
         {
-            _startTile.GetTileHighlight.TileSelected();
-            SetGoalTile(selectedTile);
+            InvalidPath(selectedTile);
             return;
         }
 
-        // aca setear los dias pasados
-        _daysPassed += _pathDuration;
-        EventManager.OnUpdateUIElement(UIManager.Elements.Duration, _daysPassed.ToString());
+        MovePlayer();
+    }
 
-        SetStartTile(_goalTile);
+    private void InvalidPath(Tile selectedTile)
+    {
+        _goalTile.GetTileHighlight.ResetSelection();
+        StartTileSelected(selectedTile);
+    }
+
+    /// <Summary>
+    /// Simulates a player "movement" in the board when you confirm
+    /// </Summary>
+    private void MovePlayer()
+    {
+        UpdateDayCounter();
+
+        _startTile.GetTileHighlight.ResetSelection();
+
+        Idle(_goalTile);
         _goalTile = null;
     }
 
-    private void ChooseNewPath(Tile selectedTile)
+    /// <Summary>
+    /// Cost of every move made by the player
+    /// </Summary>
+    private void UpdateDayCounter()
     {
-        _startTile.GetTileHighlight.TileSelected();
-        _goalTile.GetTileHighlight.ResetSelection();
-        EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, string.Empty);
+        _daysPassed += _pathDuration;
+        EventManager.OnUpdateUIElement(UIManager.Elements.Duration, _daysPassed.ToString());
+    }
 
-        SetGoalTile(selectedTile);
+    /// <Summary>
+    /// Cost of the selected move
+    /// </Summary>
+    private void UpdatePathCounter(string text)
+    {
+        EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, text);
     }
 
     private void ShowPath()
@@ -133,21 +154,24 @@ public class PathManager : MonoBehaviour
         {
             Tile tile = (Tile)_pathList[index];
 
-            tile.GetTileHighlight.TilePath();
+            if (index < _pathList.Count - 1)
+                tile.GetTileHighlight.TilePath();
+
             _pathDuration += tile.GetCost;
         }
 
-        EventManager.OnUpdateUIElement(UIManager.Elements.PathLength, "Path Cost: " + _pathDuration.ToString());
-        _startTile.GetTileHighlight.TileSelected();
-        _goalTile.GetTileHighlight.GoalSelected();
+        UpdatePathCounter(_pathDuration.ToString());
     }
 
     private void UnselectPath()
     {
         if (_pathList == null) return;
 
-        foreach (Tile tile in _pathList)
+        for (int index = 1; index < _pathList.Count; index++)
+        {
+            Tile tile = (Tile)_pathList[index];
             tile.GetTileHighlight.ResetSelection();
+        }
 
         _pathList.Clear();
     }
