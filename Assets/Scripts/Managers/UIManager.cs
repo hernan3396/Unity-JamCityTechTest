@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
         PathLength
     }
 
+    [SerializeField] private TMP_Text[] _elements;
+
     private void Awake()
     {
         EventManager.UpdateUIElement += UpdateElement;
@@ -19,8 +21,6 @@ public class UIManager : MonoBehaviour
     {
         EventManager.OnUILoaded();
     }
-
-    [SerializeField] private TMP_Text[] _elements;
 
     private void UpdateElement(Elements element, string text)
     {
